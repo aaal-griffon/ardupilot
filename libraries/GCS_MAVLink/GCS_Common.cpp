@@ -955,6 +955,7 @@ ap_message GCS_MAVLINK::mavlink_id_to_ap_message_id(const uint32_t mavlink_id) c
         { MAVLINK_MSG_ID_SCALED_IMU,            MSG_SCALED_IMU},
         { MAVLINK_MSG_ID_SCALED_IMU2,           MSG_SCALED_IMU2},
         { MAVLINK_MSG_ID_SCALED_IMU3,           MSG_SCALED_IMU3},
+        { MAVLINK_MSG_ID_HIGHRES_IMU,           MSG_HIGHRES_IMU},
         { MAVLINK_MSG_ID_SCALED_PRESSURE,       MSG_SCALED_PRESSURE},
         { MAVLINK_MSG_ID_SCALED_PRESSURE2,      MSG_SCALED_PRESSURE2},
         { MAVLINK_MSG_ID_SCALED_PRESSURE3,      MSG_SCALED_PRESSURE3},
@@ -2009,6 +2010,42 @@ void GCS_MAVLINK::send_raw_imu()
         mag.z,
         0,  // we use SCALED_IMU and SCALED_IMU2 for other IMUs
         int16_t(ins.get_temperature(0)*100));
+#endif
+}
+
+void GCS_MAVLINK::send_highres_imu()
+{
+#if AP_INERTIALSENSOR_ENABLED
+    const AP_InertialSensor &ins = AP::ins();
+    const Compass &compass = AP::compass();
+
+    const Vector3f &accel = ins.get_accel(0);
+    const Vector3f &gyro = ins.get_gyro(0);
+    Vector3f mag;
+    if (compass.get_count() >= 1) {
+        mag = compass.get_field(0);
+    } else {
+        mag.zero();
+    }
+
+    mavlink_msg_highres_imu_send(
+        chan,
+        AP_HAL::micros64(),
+        accel.x,
+        accel.y,
+        accel.z,
+        gyro.x,
+        gyro.y,
+        gyro.z,
+        mag.x,
+        mag.y,
+        mag.z,
+        0,
+        0,
+        0,
+        ins.get_temperature(0),
+        0,
+        0);
 #endif
 }
 
@@ -5880,6 +5917,11 @@ bool GCS_MAVLINK::try_send_message(const enum ap_message id)
     case MSG_SCALED_IMU3:
         CHECK_PAYLOAD_SIZE(SCALED_IMU3);
         send_scaled_imu(2, mavlink_msg_scaled_imu3_send);
+        break;
+
+    case MSG_HIGHRES_IMU:
+        CHECK_PAYLOAD_SIZE(HIGHRES_IMU);
+        send_highres_imu();
         break;
 
     case MSG_SCALED_PRESSURE:
