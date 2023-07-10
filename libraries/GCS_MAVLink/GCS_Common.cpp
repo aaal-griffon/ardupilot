@@ -2030,7 +2030,7 @@ void GCS_MAVLINK::send_highres_imu()
 
     mavlink_msg_highres_imu_send(
         chan,
-        AP_HAL::micros64(),
+        AP::ins().get_last_update_usec(),
         accel.x,
         accel.y,
         accel.z,
