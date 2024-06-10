@@ -500,9 +500,9 @@ void Display::draw_char(uint16_t x, uint16_t y, const char c)
 void Display::update_arm(uint8_t r)
 {
     if (AP_Notify::flags.armed) {
-        draw_text(COLUMN(0), ROW(r), ">>>>> ARMED! <<<<<");
+        draw_text(COLUMN(0), ROW(r), ">>>> KOLLANDI <<<<");
     } else {
-        draw_text(COLUMN(0), ROW(r), "     disarmed     ");
+        draw_text(COLUMN(0), ROW(r), "   disKOLLADI   ");
     }
 }
 
