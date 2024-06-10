@@ -35,7 +35,7 @@ extern const AP_HAL::HAL& hal;
 // See https://firmware.ardupilot.org/Tools/ToneTester/
 const AP_ToneAlarm::Tone AP_ToneAlarm::_tones[] {
 #define AP_NOTIFY_TONE_QUIET_NEG_FEEDBACK 0
-    { "MFT200L4<<<B#A#2", false },
+    { "L8P8DDDD.l16EL4fP8L16FEDEDC#L4C#P4l8EDC#P8EDC#MLfl16FMNEL8DL16DC#L4<B->", false },
 #define AP_NOTIFY_TONE_LOUD_NEG_FEEDBACK 1
     { "MFT100L4>B#A#2P8B#A#2", false },
 #define AP_NOTIFY_TONE_QUIET_NEU_FEEDBACK 2
