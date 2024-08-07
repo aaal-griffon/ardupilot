@@ -3489,13 +3489,13 @@ MAV_RESULT GCS_MAVLINK::handle_START_RX_PAIR(const mavlink_command_int_t &packet
 }
 #endif  // AP_RC_CHANNEL_ENABLED
 
-uint64_t GCS_MAVLINK::timesync_receive_timestamp_ns() const
+uint64_t GCS_MAVLINK::timesync_receive_timestamp_us() const
 {
     uint64_t ret = _port->receive_time_constraint_us(PAYLOAD_SIZE(chan, TIMESYNC));
     if (ret == 0) {
         ret = AP_HAL::micros64();
     }
-    return ret*1000LL;
+    return ret;
 }
 
 uint64_t GCS_MAVLINK::timesync_timestamp_ns() const
@@ -3530,7 +3530,7 @@ void GCS_MAVLINK::handle_timesync(const mavlink_message_t &msg)
 #endif
 
 #if HAL_LOGGING_ENABLED
-        const uint64_t round_trip_time_us = (timesync_receive_timestamp_ns() - _timesync_request.sent_ts1)*0.001f;
+        const uint64_t round_trip_time_us = (timesync_receive_timestamp_us() - _timesync_request.sent_ts1;
         AP_Logger *logger = AP_Logger::get_singleton();
         if (logger != nullptr) {
             AP::logger().Write(
@@ -3557,7 +3557,7 @@ void GCS_MAVLINK::handle_timesync(const mavlink_message_t &msg)
     // nanoseconds.  The client timestamp is as close as possible to
     // the time we received the TIMESYNC message.
     mavlink_timesync_t rsync;
-    rsync.tc1 = timesync_receive_timestamp_ns();
+    rsync.tc1 = timesync_receive_timestamp_us();
     rsync.ts1 = tsync.ts1;
 
     // respond with a timesync message
