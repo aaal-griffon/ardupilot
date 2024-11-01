@@ -443,13 +443,13 @@ private:
     Transition *transition = nullptr;
 
     // true when waiting for pilot throttle
-    bool throttle_wait:1;
+    bool throttle_wait;
 
     // true when quad is assisting a fixed wing mode
-    bool assisted_flight:1;
+    bool assisted_flight;
 
     // are we in a guided takeoff?
-    bool guided_takeoff:1;
+    bool guided_takeoff;
 
     /* if we arm in guided mode when we arm then go into a "waiting
        for takeoff command" state. In this state we are waiting for
@@ -608,6 +608,9 @@ private:
     bool option_is_set(OPTION option) const {
         return (options.get() & int32_t(option)) != 0;
     }
+
+    // minimum distance to be from destination to use approach logic
+    AP_Float approach_distance;
 
     AP_Float takeoff_failure_scalar;
     AP_Float maximum_takeoff_airspeed;
